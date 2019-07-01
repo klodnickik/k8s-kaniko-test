@@ -19,7 +19,7 @@ metadata:
 spec:
   containers:
   - name: kaniko
-    image: gcr.io/k8s-cluster-edyta/executor:debug
+    image: gcr.io/kaniko-project/executor:latest
     imagePullPolicy: Always
     command: ["cat"]
     tty: true
