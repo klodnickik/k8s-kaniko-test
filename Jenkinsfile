@@ -13,7 +13,7 @@ def label = "kaniko-gcr-${UUID.randomUUID().toString()}"
 podTemplate(name: 'kaniko', label: label, yaml: """
 kind: Pod
 metadata:
-  name: kaniko
+  name: k8s-cluster-edyta
 spec:
   containers:
   - name: kaniko
