@@ -8,19 +8,19 @@
  * kubectl create secret generic kaniko-secret --from-file=kaniko-secret.json
  */
 
-pipeline {
-  agent {
-    kubernetes {
-      yaml """
+def label = "kaniko-gcr-${UUID.randomUUID().toString()}"
+
+podTemplate(name: 'kaniko', label: label, yaml: """
 kind: Pod
 metadata:
   name: kaniko
 spec:
   containers:
   - name: kaniko
-    image: gcr.io/kaniko-project/executor:latest
+    image: gcr.io/kaniko-project/executor:debug
     imagePullPolicy: Always
-    command: ["cat"]
+    command:
+    - /busybox/cat
     tty: true
     volumeMounts:
       - name: kaniko-secret
@@ -33,14 +33,15 @@ spec:
       secret:
         secretName: kaniko-secret
 """
-    }
-  }
-  stages {
-    stage('Create kaniko job') {
-      steps {
-        container(name: 'kaniko', shell: '/busybox/sh'){
-          sh '''#!/busybox/sh -xe
-          /kaniko/executor -f `pwd`/Dockerfile -c `pwd` --cache=true --destination=gcr.io//demoimage
+  ) {
+
+  node(label) {
+    stage('Build with Kaniko') {
+      git 'https://github.com/jenkinsci/docker-jnlp-slave.git'
+      container(name: 'kaniko', shell: '/busybox/sh') {
+        withEnv(['PATH+EXTRA=/busybox:/kaniko']) {
+          sh '''#!/busybox/sh
+          /kaniko/executor -c `pwd` --cache=true --destination=gcr.io//demoimage2
           '''
         }
       }
