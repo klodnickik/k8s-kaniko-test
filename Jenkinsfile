@@ -8,7 +8,7 @@
  * kubectl create secret generic kaniko-secret --from-file=kaniko-secret.json
  */
 
-def label = "kaniko-gcr-${UUID.randomUUID().toString()}"
+def label =  "k8s-cluster-edyta"
 
 podTemplate(name: 'kaniko', label: label, yaml: """
 kind: Pod
