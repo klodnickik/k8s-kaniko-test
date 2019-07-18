@@ -8,12 +8,12 @@
  * kubectl create secret generic kaniko-secret --from-file=kaniko-secret.json
  */
 
-def label =  "k8s-cluster-edyta"
+def label =  "kaniko-test"
 
 podTemplate(name: 'kaniko', label: label, yaml: """
 kind: Pod
 metadata:
-  name: k8s-cluster-edyta
+  name: kaniko
 spec:
   containers:
   - name: kaniko
@@ -41,7 +41,7 @@ spec:
       container(name: 'kaniko', shell: '/busybox/sh') {
         withEnv(['PATH+EXTRA=/busybox:/kaniko']) {
           sh '''#!/busybox/sh
-          /kaniko/executor -c `pwd` --cache=true --destination=gcr.io//demoimage2
+          /kaniko/executor -c `pwd` --cache=true --destination=gcr.io//eu.gcr.io/krzysiek-master-project/kaniko-test-jenkins
           '''
         }
       }
