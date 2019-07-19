@@ -8,9 +8,9 @@
  * kubectl create secret generic kaniko-secret --from-file=kaniko-secret.json
  */
 
-def label =  "kaniko"
+def label =  "kubernetes"
 
-podTemplate(name: 'kaniko',  yaml: """
+podTemplate(name: 'kaniko', label: label, yaml: """
 kind: Pod
 metadata:
   name: kaniko
