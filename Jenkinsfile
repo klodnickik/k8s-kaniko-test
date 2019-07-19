@@ -19,7 +19,7 @@ spec:
   containers:
   - name: kaniko
     image: gcr.io/kaniko-project/executor:debug
-#    imagePullPolicy: Always
+    imagePullPolicy: Always
     command:
     - /busybox/cat
     tty: true
@@ -43,7 +43,7 @@ spec:
       container(name: 'kaniko', shell: '/busybox/sh') {
         withEnv(['PATH+EXTRA=/busybox:/kaniko']) {
           sh '''#!/busybox/sh
-          /kaniko/executor -c `pwd` --cache=true --destination=eu.gcr.io//krzysiek-master-project/kaniko-test-jenkins
+          /kaniko/executor -c `pwd` --cache=true --destination=eu.gcr.io/krzysiek-master-project/kaniko-test-jenkins
           '''
         }
       }
