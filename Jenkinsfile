@@ -14,7 +14,6 @@ podTemplate(name: 'kaniko', label: label, yaml: """
 kind: Pod
 metadata:
   name: kaniko
-  namespace: jenkins
 spec:
   containers:
   - name: kaniko
