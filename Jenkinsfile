@@ -10,7 +10,7 @@
 
 def label =  "kaniko"
 
-podTemplate(name: 'kaniko', label: label, yaml: """
+podTemplate(name: 'kaniko',  yaml: """
 kind: Pod
 metadata:
   name: kaniko
