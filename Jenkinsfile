@@ -8,7 +8,7 @@
  * kubectl create secret generic kaniko-secret --from-file=kaniko-secret.json
  */
 
-def label =  "kaniko"
+def label = "kaniko-${UUID.randomUUID().toString()}"
 
 podTemplate(name: 'kaniko', label: label, yaml: """
 kind: Pod
@@ -43,7 +43,7 @@ spec:
       container(name: 'kaniko', shell: '/busybox/sh') {
         withEnv(['PATH+EXTRA=/busybox:/kaniko']) {
           sh '''#!/busybox/sh
-          /kaniko/executor -c `pwd` --cache=true --destination=eu.gcr.io/krzysiek-master-project/kaniko-test-jenkins:20190807
+          /kaniko/executor -c `pwd` /Dockerfile --cache=true --destination=eu.gcr.io/krzysiek-master-project/kaniko-test-jenkins:20190807
           '''
         }
       }
