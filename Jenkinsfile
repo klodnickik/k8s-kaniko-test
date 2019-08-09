@@ -8,20 +8,20 @@
  * kubectl create secret generic kaniko-secret --from-file=kaniko-secret.json
  */
 
-def label = "kaniko"
-
-podTemplate(name: 'kaniko', label: label, yaml: """
+pipeline {
+  agent {
+    kubernetes {
+      label 'k8s-kaniko'
+      yaml """
 kind: Pod
 metadata:
   name: kaniko
-  namespace: default
 spec:
   containers:
   - name: kaniko
-    image: gcr.io/kaniko-project/executor:debug
+    image: gcr.io/pg-cicd-apps-dev-c9f3/executor:debug
     imagePullPolicy: Always
-    command:
-    - /busybox/cat
+    command: ["cat"]
     tty: true
     volumeMounts:
       - name: kaniko-secret
@@ -29,21 +29,19 @@ spec:
     env:
       - name: GOOGLE_APPLICATION_CREDENTIALS
         value: /secret/kaniko-secret.json
-  restartPolicy: Never
   volumes:
     - name: kaniko-secret
       secret:
         secretName: kaniko-secret
 """
-  ) {
-
-  node(label) {
-    stage('Build with Kaniko') {
-      git 'https://github.com/jenkinsci/docker-jnlp-slave.git'
-      container(name: 'kaniko', shell: '/busybox/sh') {
-        withEnv(['PATH+EXTRA=/busybox:/kaniko']) {
-          sh '''#!/busybox/sh
-          /kaniko/executor -c `pwd` --dockerfile=./Dockerfile --cache=true --destination=eu.gcr.io/krzysiek-master-project/kaniko-test-jenkins:20190808
+    }
+  }
+  stages {
+    stage('Create kaniko job') {
+      steps {
+        container(name: 'kaniko', shell: '/busybox/sh'){
+          sh '''#!/busybox/sh -xe
+          /kaniko/executor -f `pwd`/Dockerfile -c `pwd` --cache=true --destination=eu.gcr.io/krzysiek-master-project/kaniko-test-jenkins:20190808
           '''
         }
       }
