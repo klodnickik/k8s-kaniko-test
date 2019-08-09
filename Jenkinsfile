@@ -19,7 +19,7 @@ metadata:
 spec:
   containers:
   - name: kaniko
-    image: gcr.io/pg-cicd-apps-dev-c9f3/executor:debug
+    image: gcr.io/kaniko-project/executor:debug
     imagePullPolicy: Always
     command: ["cat"]
     tty: true
