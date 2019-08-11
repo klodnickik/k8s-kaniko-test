@@ -41,7 +41,7 @@ spec:
       steps {
         container(name: 'kaniko', shell: '/busybox/sh'){
           sh '''#!/busybox/sh -xe
-          /kaniko/executor -f `pwd`/Dockerfile -c `pwd` --cache=true --destination=eu.gcr.io/krzysiek-master-project/kaniko-test-jenkins:20190809
+          /kaniko/executor -f `pwd`/Dockerfile -c `pwd` --cache=true --destination=eu.gcr.io/krzysiek-master-project/kaniko-test-jenkins:20190811
           '''
         }
       }
